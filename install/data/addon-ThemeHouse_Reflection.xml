@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="utf-8"?>
+<addon addon_id="ThemeHouse_Reflection" title="[⌂] Reflection" version_string="1.0.0" version_id="10000700" url="http://xf.themehouse.io/" install_callback_class="ThemeHouse_Install" install_callback_method="install" uninstall_callback_class="ThemeHouse_Install" uninstall_callback_method="uninstall">
+  <admin_navigation>
+    <navigation navigation_id="methodTemplates" parent_navigation_id="addOnDevelopment" display_order="200" link="method-templates" admin_permission_id="" debug_only="0" hide_no_children="0"/>
+  </admin_navigation>
+  <admin_permissions/>
+  <admin_style_properties/>
+  <admin_templates>
+    <template title="th_helper_method_add_reflection"><![CDATA[<xen:radiounit label="{xen:phrase th_create_new_method_reflection}:" name="create_new_method">
+	<xen:option label="{xen:phrase th_from_blank_method_with_name_reflection}:" name="method" selected="true">
+		<xen:textbox name="method" />
+	</xen:option>
+</xen:radiounit>
+
+<xen:submitunit>
+	<input type="submit" value="{xen:phrase continue}..." accesskey="s" class="button primary"  />
+</xen:submitunit>]]></template>
+    <template title="th_helper_method_edit_reflection"><![CDATA[<xen:textboxunit name="signature" value="{$signature}" label="{xen:phrase th_method_signature_reflection}:" />
+
+<xen:textboxunit name="body" value="{$body}" label="{xen:phrase th_method_body_reflection}:" rows="20" code="true" class="fullWidth surplusLabel" />
+
+<xen:include template="helper_addon_unit" />]]></template>
+    <template title="th_method_add_reflection"><![CDATA[<xen:title>{xen:phrase th_add_method_reflection}</xen:title>
+
+<xen:navigation>
+	<xen:breadcrumb href="{xen:adminlink '{$prefix}/view', $class}">{$class.class}</xen:breadcrumb>
+</xen:navigation>
+	
+<xen:form action="{xen:adminlink '{$prefix}/add-method', $class}">
+	<xen:include template="th_helper_method_add_reflection" />
+</xen:form>]]></template>
+    <template title="th_method_delete_reflection"><![CDATA[<xen:title>{xen:phrase th_confirm_delete_method_reflection}: {$method}</xen:title>
+<xen:h1>{xen:phrase th_confirm_delete_method_reflection}</xen:h1>
+
+<xen:navigation>
+	<xen:breadcrumb href="{xen:adminlink '{$prefix}/edit-method', $class}">{$class.class}</xen:breadcrumb>
+	<xen:breadcrumb href="{xen:adminlink '{$prefix}/edit-method', $class, 'method={$method}'}">{$method}</xen:breadcrumb>
+</xen:navigation>
+
+<xen:require css="public:delete_confirmation.css" />
+
+<xen:form action="{xen:adminlink '{$prefix}/delete-method', $class}" class="deleteConfirmForm formOverlay">
+
+	<p>{xen:phrase th_please_confirm_that_you_want_to_delete_following_method_reflection}:</p>
+	<strong><a href="{xen:adminlink '{$prefix}/edit-method', $class, 'method={$method}'}">{$method}</a></strong>
+
+	<input type="hidden" name="method" value="{$method}" />
+
+	<xen:submitunit save="{xen:phrase th_delete_method_reflection}" />
+	
+	<input type="hidden" name="_xfConfirm" value="1" />
+</xen:form>]]></template>
+    <template title="th_method_edit_reflection"><![CDATA[<xen:title>{$method}</xen:title>
+
+<xen:navigation>
+	<xen:breadcrumb href="{xen:adminlink '{$prefix}/view', $class}">{$class.class}</xen:breadcrumb>
+</xen:navigation>
+	
+<xen:form action="{xen:adminlink '{$prefix}/save-method', $class, 'method={$method}'}" class="AutoValidator" data-redirect="yes">
+	<xen:include template="th_helper_method_edit_reflection" />
+
+	<input type="hidden" name="redirect" value="{$redirect}" />
+
+	<xen:submitunit>
+		<input type="submit"  value="{xen:phrase save_changes}" accesskey="s" class="button primary"  />
+		<input type="button" name="delete" value="{xen:phrase th_delete_method_reflection}..."
+			accesskey="d" class="button OverlayTrigger"
+			data-href="{xen:adminlink '{$prefix}/delete-method', $class, 'method={$method}'}"
+		/>
+	</xen:submitunit>
+</xen:form>]]></template>
+    <template title="th_method_template_config_reflection"><![CDATA[<xen:title>{xen:phrase th_method_template_configuration_reflection}</xen:title>
+	
+<xen:form action="{xen:adminlink '{$prefix}/add-method', $class}" class="AutoValidator" data-redirect="yes">
+
+	<xen:foreach loop="$configDefinitions" key="$configDefinitionName" value="$configDefinition">
+		<xen:textboxunit name="{$configDefinitionName}" label="{$configDefinition.name}:" value="{$configValues.{$configDefinitionName}}" hint="{xen:if {$configDefinition.required}, {xen:phrase required}}" />
+	</xen:foreach>
+
+	<input type="hidden" name="method_template_id" value="{$methodTemplateId}" />
+	
+	<xen:submitunit>
+		<input type="submit"  value="{xen:phrase save_changes}" accesskey="s" class="button primary"  />
+	</xen:submitunit>
+	
+	<input type="hidden" name="_xfConfirm" value="1" />
+</xen:form>]]></template>
+    <template title="th_method_template_delete_reflection"><![CDATA[<xen:title>{xen:phrase th_confirm_deletion_of_method_template_reflection}: {$methodTemplate.title}</xen:title>
+
+<xen:h1>{xen:phrase th_confirm_deletion_of_method_template_reflection}</xen:h1>
+
+<xen:navigation>
+	<xen:breadcrumb href="{xen:adminlink 'method-templates/edit', $methodTemplate}">{$methodTemplate.title}</xen:breadcrumb>
+</xen:navigation>
+
+<xen:require css="delete_confirmation.css" />
+
+<xen:form action="{xen:adminlink 'method-templates/delete', $methodTemplate}" class="deleteConfirmForm formOverlay">
+	<p>{xen:phrase th_please_confirm_want_to_delete_method_template_reflection}:</p>
+	<strong><a href="{xen:adminlink 'method-templates/edit', $methodTemplate}">{$methodTemplate.title}</a></strong>
+
+	<xen:submitunit save="{xen:phrase th_delete_method_template_reflection}" />
+
+	<input type="hidden" name="_xfConfirm" value="1" />
+</xen:form>]]></template>
+    <template title="th_method_template_edit_reflection"><![CDATA[<xen:title>{xen:if '{$methodTemplate.method_template_id}', '{xen:phrase th_edit_method_template_reflection}: {$methodTemplate.title}', '{xen:phrase th_create_new_method_template_reflection}'}</xen:title>
+
+<xen:h1>{xen:if '{$methodTemplate.method_template_id}', '{xen:phrase th_edit_method_template_reflection}: <em>{$methodTemplate.title}</em>', '{xen:phrase th_create_new_method_template_reflection}'}</xen:h1>
+
+<xen:if is="{$methodTemplate.method_template_id}">
+	<xen:navigation>
+		<xen:breadcrumb href="{xen:adminlink 'method-templates'}#{xen:helper listitemid, $methodTemplate.method_template_id}">{$methodTemplate.title}</xen:breadcrumb>
+	</xen:navigation>
+</xen:if>
+
+<xen:form action="{xen:adminlink 'method-templates/save', $methodTemplate}" class="AutoValidator" data-redirect="on">
+	<xen:textboxunit label="{xen:phrase title}:" name="title" value="{$methodTemplate.title}" data-liveTitleTemplate="{xen:if {$methodTemplate.method_template_id},
+		'{xen:phrase th_edit_method_template_reflection}: <em>%s</em>',
+		'{xen:phrase th_create_new_method_template_reflection}: <em>%s</em>'}" />
+
+	<xen:controlunit label="{xen:phrase execute_callback}:">
+		<xen:textbox placeholder="{xen:phrase class}" name="callback_class" value="{$methodTemplate.callback_class}" size="25" />
+		::
+		<xen:textbox placeholder="{xen:phrase method}" name="callback_method" value="{$methodTemplate.callback_method}" size="25" />
+	</xen:controlunit>
+	
+	<xen:selectunit label="{xen:phrase type}:" name="content_type" value="{$methodTemplate.content_type}">
+		<xen:foreach loop="$contentTypes" key="$contentTypeId" value="$contentTypeName">
+			<xen:option label="{$contentTypeName}" value="{$contentTypeId}" />
+		</xen:foreach>
+	</xen:selectunit>
+
+	<xen:submitunit>
+		<input type="submit" name="saveexit" value="{xen:phrase save_and_exit}" accesskey="e" class="button primary" id="saveExitButton" />
+		<input type="submit" name="reload" value="{xen:phrase save_changes}" accesskey="s" class="button" id="saveReloadButton" data-ajaxvalue="{xen:phrase save_all_changes}" />
+		<xen:if is="{$methodTemplate.method_template_id}">
+			<input type="button" value="{xen:phrase th_delete_method_template_reflection}..." accesskey="d" class="button OverlayTrigger"
+				data-href="{xen:adminlink method-templates/delete, $methodTemplate}" />
+		</xen:if>
+	</xen:submitunit>
+</xen:form>]]></template>
+    <template title="th_method_template_list_reflection"><![CDATA[<xen:title>{xen:phrase th_method_templates_reflection}</xen:title>
+
+<xen:h1>{xen:phrase th_method_templates_reflection}</xen:h1>
+
+<xen:topctrl>
+    <a href="{xen:adminlink 'method-templates/add'}" class="button">+ {xen:phrase th_create_new_method_template_reflection}</a>
+</xen:topctrl>
+
+<xen:require css="filter_list.css" />
+<xen:require js="js/xenforo/filter_list.js" />
+
+<xen:form action="{xen:adminlink 'method-templates/toggle'}" class="section AutoValidator">
+
+    <xen:if is="{$methodTemplates}">
+        <h2 class="subHeading">
+            <xen:include template="filter_list_controls" />
+            {xen:phrase th_method_templates_reflection}
+        </h2>
+
+        <ol class="FilterList">
+            <xen:foreach loop="$methodTemplates" key="$methodTemplateId" value="$methodTemplate">
+                <xen:listitem id="{$methodTemplateId}"
+                    label="{$methodTemplate.title}"
+                    snippet=""
+                    href="{xen:adminlink 'method-templates/edit', $methodTemplate}"
+                    delete="{xen:adminlink 'method-templates/delete', $methodTemplate}"
+                    deletehint="{xen:phrase delete}">
+                </xen:listitem>
+            </xen:foreach>
+        </ol>
+
+        <p class="sectionFooter">{xen:phrase showing_x_of_y_items, 'count=<span class="FilterListCount">{xen:count $methodTemplates}</span>', 'total={xen:count $methodTemplates}'}</p>
+
+    <xen:else />
+        <div class="noResults">{xen:phrase th_there_are_no_method_templates_reflection}</div>
+    </xen:if>
+
+</xen:form>]]></template>
+  </admin_templates>
+  <admin_template_modifications>
+    <modification template="th_helper_method_add_reflection" modification_key="th_helperMethodAdd_reflection" description="Adds method templates option." execution_order="10" enabled="1" action="preg_replace">
+      <find><![CDATA[#(<xen:radiounit.*>)(.*)selected="true"(.*</xen:radiounit>)#Us]]></find>
+      <replace><![CDATA[<xen:if is="{$methodTemplates}">
+${1}
+	<xen:option label="{xen:phrase th_from_method_template_reflection}:" name="method_template" selected="true">
+		<xen:select name="method_template_id">
+			<xen:foreach loop="$methodTemplates" key="$methodTemplateId" value="$methodTemplate">
+				<xen:option value="{$methodTemplateId}" label="{$methodTemplate.title}" />
+			</xen:foreach>
+		</xen:select>
+	</xen:option>${2}${3}
+<xen:else />
+${0}
+</xen:if>]]></replace>
+    </modification>
+  </admin_template_modifications>
+  <code_events/>
+  <code_event_listeners>
+    <listener event_id="container_admin_params" execute_order="10" callback_class="ThemeHouse_Reflection_Listener_ContainerAdminParams" callback_method="containerAdminParams" active="1" hint="" description=""/>
+    <listener event_id="controller_pre_dispatch" execute_order="10" callback_class="ThemeHouse_Listener_ControllerPreDispatch" callback_method="controllerPreDispatch" active="1" hint="" description=""/>
+    <listener event_id="file_health_check" execute_order="10" callback_class="ThemeHouse_Reflection_Listener_FileHealthCheck" callback_method="fileHealthCheck" active="1" hint="" description=""/>
+    <listener event_id="init_dependencies" execute_order="10" callback_class="ThemeHouse_Listener_InitDependencies" callback_method="initDependencies" active="1" hint="" description=""/>
+  </code_event_listeners>
+  <cron/>
+  <email_templates/>
+  <email_template_modifications/>
+  <optiongroups/>
+  <permissions>
+    <permission_groups/>
+    <permissions/>
+    <interface_groups/>
+  </permissions>
+  <phrases>
+    <phrase title="admin_navigation_methodTemplates" version_id="10000700" version_string="1.0.0"><![CDATA[Method Templates]]></phrase>
+    <phrase title="th_add_method_reflection" version_id="10000700" version_string="1.0.0"><![CDATA[Add Method]]></phrase>
+    <phrase title="th_confirm_delete_method_reflection" version_id="10000700" version_string="1.0.0"><![CDATA[Confirm Delete Method]]></phrase>
+    <phrase title="th_confirm_deletion_of_method_template_reflection" version_id="10000700" version_string="1.0.0"><![CDATA[Confirm Deletion of Method Template]]></phrase>
+    <phrase title="th_create_new_method_reflection" version_id="10000700" version_string="1.0.0"><![CDATA[Create New Method]]></phrase>
+    <phrase title="th_create_new_method_template_reflection" version_id="10000700" version_string="1.0.0"><![CDATA[Create New Method Template]]></phrase>
+    <phrase title="th_delete_method_reflection" version_id="10000700" version_string="1.0.0"><![CDATA[Delete Method]]></phrase>
+    <phrase title="th_delete_method_template_reflection" version_id="10000700" version_string="1.0.0"><![CDATA[Delete Method Template]]></phrase>
+    <phrase title="th_edit_method_template_reflection" version_id="10000700" version_string="1.0.0"><![CDATA[Edit Method Template]]></phrase>
+    <phrase title="th_from_blank_method_with_name_reflection" version_id="10000700" version_string="1.0.0"><![CDATA[From blank method with name]]></phrase>
+    <phrase title="th_from_method_template_reflection" version_id="10000700" version_string="1.0.0"><![CDATA[From method template]]></phrase>
+    <phrase title="th_methods_reflection" version_id="10000700" version_string="1.0.0"><![CDATA[Methods]]></phrase>
+    <phrase title="th_method_body_reflection" version_id="10000700" version_string="1.0.0"><![CDATA[Method Body]]></phrase>
+    <phrase title="th_method_name_reflection" version_id="10000700" version_string="1.0.0"><![CDATA[Method Name]]></phrase>
+    <phrase title="th_method_signature_reflection" version_id="10000700" version_string="1.0.0"><![CDATA[Method Signature]]></phrase>
+    <phrase title="th_method_templates_reflection" version_id="10000700" version_string="1.0.0"><![CDATA[Method Templates]]></phrase>
+    <phrase title="th_method_template_configuration_reflection" version_id="10000700" version_string="1.0.0"><![CDATA[Method Template Configuration]]></phrase>
+    <phrase title="th_please_confirm_that_you_want_to_delete_following_method_reflection" version_id="10000700" version_string="1.0.0"><![CDATA[Please confirm that you want to delete the following method]]></phrase>
+    <phrase title="th_please_confirm_want_to_delete_method_template_reflection" version_id="10000700" version_string="1.0.0"><![CDATA[Please confirm that you want to delete the following method template]]></phrase>
+    <phrase title="th_primary_key_id_reflection" version_id="10000700" version_string="1.0.0"><![CDATA[Primary Key ID]]></phrase>
+    <phrase title="th_table_name_reflection" version_id="10000700" version_string="1.0.0"><![CDATA[Table Name]]></phrase>
+    <phrase title="th_there_are_no_method_templates_reflection" version_id="10000700" version_string="1.0.0"><![CDATA[There are no method templates.]]></phrase>
+  </phrases>
+  <route_prefixes>
+    <route_type type="admin">
+      <prefix original_prefix="method-templates" class="ThemeHouse_Reflection_Route_PrefixAdmin_MethodTemplates" build_link="data_only"/>
+    </route_type>
+  </route_prefixes>
+  <style_properties/>
+  <templates/>
+  <public_template_modifications>
+    <modification template="footer" modification_key="th_copyrightNotice_reflection" description="Copyright notice for [⌂] Reflection" execution_order="1" enabled="1" action="callback">
+      <find><![CDATA[/{xen:phrase (?:xenforo|extra)_copyright}/]]></find>
+      <replace><![CDATA[ThemeHouse_Listener_InitDependencies::copyrightNotice]]></replace>
+    </modification>
+  </public_template_modifications>
+  <bb_code_media_sites/>
+  <bb_codes/>
+</addon>
